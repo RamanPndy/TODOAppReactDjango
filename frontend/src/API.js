@@ -1,6 +1,6 @@
 const API = {
-    GET_BUCKETS : '/api/buckets/',
-    GET_TODOS : '/api/todos/'
+    BUCKETS : '/api/buckets/',
+    TODOS : '/api/todos/'
 }
 
 export default API;

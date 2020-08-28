@@ -4,3 +4,6 @@
 .DS_Store
 __pycache__
 package-lock.json
+.gitignore
+docker-compose.yml
+db.sql
