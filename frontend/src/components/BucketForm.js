@@ -25,7 +25,7 @@ class BucketForm extends Component {
           onSubmit={this.props.handleSubmit(this.onSubmit)}
           className='ui form error'
         >
-          <Field name='task' component={this.renderField} label='Task' />
+          <Field name='bucket' component={this.renderField} label='Bucket' />
           <button className='ui primary button'>Add</button>
         </form>
       </div>

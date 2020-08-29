@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { GET_TODOS, ADD_TODO, DELETE_TODO } from './types';
+
+import { GET_TODOS, ADD_TODO, DELETE_TODO, EDIT_TODO } from './types';
 import history from '../history'; 
 import API from '../API';
 
@@ -29,5 +30,15 @@ export const deleteTodo = id => async dispatch => { // added
     type: DELETE_TODO,
     payload: id
   })
+  history.push('/');
 }
-history.push('/');
+
+// EDIT TODO
+export const editTodo = (id, formValues) => async dispatch => {
+  const res = await axios.patch(`/api/todos/${id}/`, formValues);
+  dispatch({
+    type: EDIT_TODO,
+    payload: res.data
+  });
+  history.push('/');
+}

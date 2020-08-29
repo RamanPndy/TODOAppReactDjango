@@ -17,9 +17,15 @@ class Bucket(BaseModel):
         return self.name
 
 class Todo(BaseModel):
+    STATUS_CHOICES = (
+        ("CREATED", "CREATED"),
+        ("INPROGRESS", "INPROGRESS"),
+        ("COMPLETED", "COMPLETED"),
+        ("ABANDONED", "ABANDONED")
+    )
     bucket = models.ForeignKey(Bucket, related_name="bucket", on_delete=models.PROTECT)
     task = models.CharField(max_length=255)
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='CREATED')
 
     def __str__(self):
         return self.task

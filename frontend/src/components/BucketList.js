@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getBuckets } from '../actions/buckets';
+
+import { getBuckets, deleteBucket } from '../actions/buckets';
 
 class BucketList extends Component {
   componentDidMount() {
@@ -12,9 +14,19 @@ class BucketList extends Component {
       <div className='ui relaxed divided list' style={{ marginTop: '2rem' }}>
         {this.props.buckets.map(bucket => (
           <div className='item' key={bucket.id}>
+            <div className='right floated content'>
+              <Link
+                to={`/delete/${bucket.id}`}
+                className='small ui negative basic button'
+              >
+                Delete
+              </Link>
+            </div>
             <i className='large calendar outline middle aligned icon' />
             <div className='content'>
-              <a className='header'>{bucket.name}</a>
+              <Link to={`/todos/${bucket.id}`} className='header'>
+                {bucket.name}
+              </Link>
               <div className='description'>{bucket.created_at}</div>
             </div>
           </div>
@@ -28,4 +40,4 @@ const mapStateToProps = state => ({
   buckets: Object.values(state.buckets)
 });
 
-export default connect(mapStateToProps, { getBuckets })(BucketList);
+export default connect(mapStateToProps, { getBuckets, deleteBucket })(BucketList);
