@@ -9,6 +9,7 @@ import Header from './layout/Header';
 import BucketDashboard from './BucketDashboard';
 import TODODashboard from './TODODashboard';
 import BucketDelete from './BucketDelete';
+import TODODelete from './TODODelete';
 import TodoEdit from './ToDoEdit';
 
 class App extends Component {
@@ -21,6 +22,7 @@ class App extends Component {
             <Route exact path='/' component={BucketDashboard} />
             <Route exact path='/todos/:id' component={TODODashboard} />
             <Route exact path='/delete/:id' component={BucketDelete} />
+            <Route exact path='/todo/delete/:id' component={TODODelete} />
             <Route exact path='/edit/:id' component={TodoEdit} />
           </Switch>
         </Router>

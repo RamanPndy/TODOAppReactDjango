@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_TODOS, ADD_TODO, DELETE_TODO, EDIT_TODO } from './types';
+import { GET_TODOS, ADD_TODO, DELETE_TODO, EDIT_TODO, GET_TODOS_BY_BUCKET } from './types';
 import history from '../history'; 
 import API from '../API';
 
@@ -13,9 +13,27 @@ export const getTodos = () => async dispatch => {
   });
 };
 
+// GET TODOS BY BUCKET
+export const getTodosByBucket = () => async dispatch => {
+  const res = await axios.get(API.TODOSBYBUCKET + `?bucketid=${id}`);
+  dispatch({
+    type: GET_TODOS_BY_BUCKET,
+    payload: res.data
+  });
+};
+
+// GET TODO
+export const getTodo = id => async dispatch => {
+  const res = await axios.get(`/api/todos/${id}/`);
+  dispatch({
+    type: GET_TODO,
+    payload: res.data
+  });
+};
+
 // ADD TODO
 export const addTodo = formValues => async dispatch => {
-  const res = await axios.post(API.TODOS, { ...formValues });
+  const res = await axios.post(API.TODO, { ...formValues });
   dispatch({
     type: ADD_TODO,
     payload: res.data

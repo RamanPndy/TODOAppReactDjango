@@ -16,8 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from todos.views import GetTodosByBucketAPIView, BucketAPIView, ToDoAPIView
+
 urlpatterns = [
     path('', include('frontend.urls')),
     path('api/', include('todos.urls')),
     path('admin/', admin.site.urls),
+    path('bucket', BucketAPIView.as_view()),
+    path('todo', ToDoAPIView.as_view()),
+    path('todosbybucket', GetTodosByBucketAPIView.as_view())
 ]

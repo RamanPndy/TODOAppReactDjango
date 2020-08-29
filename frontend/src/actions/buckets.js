@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_BUCKETS, ADD_BUCKET, DELETE_BUCKET } from './types';
+import { GET_BUCKETS, GET_BUCKET, ADD_BUCKET, DELETE_BUCKET } from './types';
 import history from '../history'; 
 import API from '../API';
 
@@ -12,9 +12,18 @@ export const getBuckets = () => async dispatch => {
   });
 };
 
+// GET BUCKET
+export const getBucket = id => async dispatch => {
+  const res = await axios.get(`/api/buckets/${id}/`);
+  dispatch({
+    type: GET_BUCKET,
+    payload: res.data
+  });
+};
+
 // ADD BUCKET
 export const addBucket = formValues => async dispatch => {
-  const res = await axios.post(API.BUCKETS, { ...formValues });
+  const res = await axios.post(API.BUCKET, { ...formValues });
   dispatch({
     type: ADD_BUCKET,
     payload: res.data
@@ -24,10 +33,10 @@ export const addBucket = formValues => async dispatch => {
 
 // DELETE BUCKET
 export const deleteBucket = id => async dispatch => { // added
-  await axios.delete(`/api/buckets/${id}/`);
+  await axios.delete(`/api/buckets/${id}/`)
   dispatch({
     type: DELETE_BUCKET,
     payload: id
   })
-}
-history.push('/');
+  history.push('/');
+};

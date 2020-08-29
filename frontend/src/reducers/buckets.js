@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { GET_BUCKETS, ADD_BUCKET, DELETE_BUCKET } from '../actions/types';
+import { GET_BUCKETS, GET_BUCKET, ADD_BUCKET, DELETE_BUCKET } from '../actions/types';
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -8,6 +8,7 @@ export default (state = {}, action) => {
         ...state,
         ..._.mapKeys(action.payload, 'id')
       };
+    case GET_BUCKET:
     case ADD_BUCKET:
       return {
         ...state,

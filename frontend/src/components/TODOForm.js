@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 
 class TodoForm extends Component {
   renderField = ({ input, label, meta: { touched, error } }) => {
@@ -15,6 +15,7 @@ class TodoForm extends Component {
   };
 
   onSubmit = formValues => {
+    formValues['bucketid'] = this.props.bucketId
     this.props.onSubmit(formValues);
   };
 
@@ -27,6 +28,12 @@ class TodoForm extends Component {
           className='ui form error'
         >
           <Field name='task' component={this.renderField} label='Task' />
+          <Field name="status" component="select" label='Status' style={{marginTop:10, marginBottom: 10}}>
+            <option></option>
+            <option value="INPROGRESS">INPROGRESS</option>
+            <option value="COMPLETED">COMPLETED</option>
+            <option value="ABANDONED">ABANDONED</option>
+          </Field>
           <button className='ui primary button'>{btnText}</button>
         </form>
       </div>

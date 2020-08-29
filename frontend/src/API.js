@@ -1,6 +1,9 @@
 const API = {
     BUCKETS : '/api/buckets/',
-    TODOS : '/api/todos/'
+    BUCKET : '/bucket',
+    TODO : '/todo',
+    TODOS : '/api/todos/',
+    TODOSBYBUCKET: '/todosbybucket'
 }
 
 export default API;

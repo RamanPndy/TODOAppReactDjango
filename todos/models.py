@@ -10,6 +10,10 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    @staticmethod
+    def get_admin_user():
+        return User.objects.get(username="todoappadmin")
+
 class Bucket(BaseModel):
     name = models.CharField(max_length=255)
 

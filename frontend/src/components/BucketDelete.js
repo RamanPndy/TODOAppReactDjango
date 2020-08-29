@@ -14,7 +14,7 @@ class BucketDelete extends Component {
     if (!this.props.bucket) {
       return 'Are you sure you want to delete this Bucket?';
     }
-    return `Are you sure you want to delete the Bucket: ${this.props.todo.task}`;
+    return `Are you sure you want to delete the Bucket: ${this.props.bucket.name} ?`;
   }
 
   renderActions() {

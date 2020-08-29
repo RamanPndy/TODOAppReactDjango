@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { getTodos, deleteTodo } from '../actions/todos';
+import { getTodosByBucket, deleteTodo } from '../actions/todos';
 
 class TodoList extends Component {
   componentDidMount() {
-    this.props.getTodos();
+    this.props.getTodosByBucket();
   }
 
   render() {
@@ -27,6 +27,8 @@ class TodoList extends Component {
               <Link to={`/edit/${todo.id}`} className='header'>
                 {todo.task}
               </Link>
+              <div className='description'>{todo.bucket}</div>
+              <div className='description'>{todo.status}</div>
               <div className='description'>{todo.created_at}</div>
             </div>
           </div>
@@ -40,4 +42,4 @@ const mapStateToProps = state => ({
   todos: Object.values(state.todos)
 });
 
-export default connect(mapStateToProps, { getTodos, deleteTodo })(TodoList);
+export default connect(mapStateToProps, { getTodosByBucket, deleteTodo })(TodoList);

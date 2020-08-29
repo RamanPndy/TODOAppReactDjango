@@ -1,7 +1,12 @@
+from datetime import datetime
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from TodoApp.settings import logger
 from .serializers import TodoSerializer, BucketSerializer
-from todos.models import Todo, Bucket
+from todos.models import Todo, Bucket, BaseModel
 
 class BucketViewSet(viewsets.ModelViewSet):
     queryset = Bucket.objects.all()
@@ -10,3 +15,50 @@ class BucketViewSet(viewsets.ModelViewSet):
 class TodoViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
+
+class GetTodosByBucketAPIView(APIView):
+    def get(self, request):
+        bucket_id = request.query_params['bucketid']
+        todos_list = []
+        try:
+            todos = Todo.objects.filter(bucket__id=bucket_id)
+            for todo in todos:
+                data = {}
+                data['bucket'] = todo.bucket.name
+                data['task'] = todo.task
+                data['status'] = todo.status
+                data['created_at'] = todo.created_at
+                todos_list.append(data)
+            return Response(status=status.HTTP_200_OK, data=todos_list)
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data=todos_list)
+
+class BucketAPIView(APIView):
+    def post(self, request):
+        request_data = request.data
+        bucket_name = request_data.get('bucket')
+        try:
+            user = BaseModel.get_admin_user()
+            Bucket.objects.create(name=bucket_name, created_by=user, last_modified_by=user,
+                                  created_at=datetime.now(), last_modified_at=datetime.now())
+            return Response(status=status.HTTP_200_OK, data="Bucket {} created.".format(bucket_name))
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ToDoAPIView(APIView):
+    def post(self, request):
+        request_data = request.data
+        bucket_id = request_data.get('bucketid')
+        task = request_data.get('task')
+        taskstatus = request_data.get('status')
+        try:
+            user = BaseModel.get_admin_user()
+            bucket = Bucket.objects.get(id=bucket_id)
+            Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
+                                created_by=user, last_modified_by=user, created_at=datetime.now(), last_modified_at=datetime.now())
+            return Response(status=status.HTTP_200_OK, data="Task {} created under Bucket {}.".format(task, bucket.name))
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

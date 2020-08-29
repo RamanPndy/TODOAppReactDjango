@@ -5,7 +5,7 @@ import BucketForm from './BucketForm';
 
 class BucketCreate extends Component {
   onSubmit = formValues => {
-    this.props.addTodo(formValues);
+    this.props.addBucket(formValues);
   };
 
   render() {
