@@ -8,6 +8,7 @@ class BucketDashboard extends Component {
       <div className='ui container'>
         <div>Create TODO Bucket</div>
         <BuckerCreate />
+        <h3>Bucket List</h3>
         <BucketList />
       </div>
     );

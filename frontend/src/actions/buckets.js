@@ -14,7 +14,7 @@ export const getBuckets = () => async dispatch => {
 
 // GET BUCKET
 export const getBucket = id => async dispatch => {
-  const res = await axios.get(`/api/buckets/${id}/`);
+  const res = await axios.get(API.BUCKETS + `${id}/`);
   dispatch({
     type: GET_BUCKET,
     payload: res.data
@@ -32,11 +32,15 @@ export const addBucket = formValues => async dispatch => {
 };
 
 // DELETE BUCKET
-export const deleteBucket = id => async dispatch => { // added
-  await axios.delete(`/api/buckets/${id}/`)
-  dispatch({
-    type: DELETE_BUCKET,
-    payload: id
-  })
-  history.push('/');
+export const deleteBucket = id => async dispatch => {
+  await axios.delete(API.BUCKET + `?bucketid=${id}`)
+  .then(res => {
+    console.log(res)
+    dispatch({
+      type: DELETE_BUCKET,
+      payload: id
+    })
+    history.push('/');
+})
+.catch(err => alert(err.response.data))
 };

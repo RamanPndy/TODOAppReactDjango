@@ -25,6 +25,7 @@ class GetTodosByBucketAPIView(APIView):
             for todo in todos:
                 data = {}
                 data['bucket'] = todo.bucket.name
+                data['id'] = todo.id
                 data['task'] = todo.task
                 data['status'] = todo.status
                 data['created_at'] = todo.created_at
@@ -40,9 +41,24 @@ class BucketAPIView(APIView):
         bucket_name = request_data.get('bucket')
         try:
             user = BaseModel.get_admin_user()
-            Bucket.objects.create(name=bucket_name, created_by=user, last_modified_by=user,
+            bucket = Bucket.objects.create(name=bucket_name, created_by=user, last_modified_by=user,
                                   created_at=datetime.now(), last_modified_at=datetime.now())
-            return Response(status=status.HTTP_200_OK, data="Bucket {} created.".format(bucket_name))
+            return Response(status=status.HTTP_200_OK, data={'id': bucket.id, 'name': bucket.name, 'created_at': bucket.created_at})
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        bucket_id = request.query_params['bucketid']
+        try:
+            bucket = Bucket.objects.get(id=bucket_id)
+            todos = Todo.objects.filter(bucket=bucket)
+            if todos.exists():
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data="Bucket {} has todos {} associated with it.".
+                                format(bucket.name, ''.join([todo.task for todo in todos])))
+            else:
+                bucket.delete()
+                return Response(status=status.HTTP_200_OK, data="Bucket {} deleted.".format(bucket.name))
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -56,9 +72,9 @@ class ToDoAPIView(APIView):
         try:
             user = BaseModel.get_admin_user()
             bucket = Bucket.objects.get(id=bucket_id)
-            Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
+            todo = Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
                                 created_by=user, last_modified_by=user, created_at=datetime.now(), last_modified_at=datetime.now())
-            return Response(status=status.HTTP_200_OK, data="Task {} created under Bucket {}.".format(task, bucket.name))
+            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'task': todo.task, 'bucket': bucket.name, 'created_at': todo.created_at})
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

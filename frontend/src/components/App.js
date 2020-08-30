@@ -23,7 +23,7 @@ class App extends Component {
             <Route exact path='/todos/:id' component={TODODashboard} />
             <Route exact path='/delete/:id' component={BucketDelete} />
             <Route exact path='/todo/delete/:id' component={TODODelete} />
-            <Route exact path='/edit/:id' component={TodoEdit} />
+            <Route exact path='/todo/edit/:id' component={TodoEdit} />
           </Switch>
         </Router>
       </Provider>

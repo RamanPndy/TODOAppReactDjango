@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 
 class TodoForm extends Component {
   renderField = ({ input, label, meta: { touched, error } }) => {
@@ -28,8 +28,8 @@ class TodoForm extends Component {
           className='ui form error'
         >
           <Field name='task' component={this.renderField} label='Task' />
-          <Field name="status" component="select" label='Status' style={{marginTop:10, marginBottom: 10}}>
-            <option></option>
+          <Field name="status" component="select" label='Status' style={{marginTop:10, marginBottom:10, paddingBottom:10}}>
+            <option value="CREATED">CREATED</option>
             <option value="INPROGRESS">INPROGRESS</option>
             <option value="COMPLETED">COMPLETED</option>
             <option value="ABANDONED">ABANDONED</option>

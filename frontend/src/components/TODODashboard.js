@@ -17,7 +17,8 @@ class TODODashboard extends Component {
       <div className='ui container'>
         <div>Create TODO</div>
         <TodoCreate bucketId={this.state.bucketid} />
-        <TodoList bucketId={this.state.bucketid} />
+        <h3>TODO List</h3>
+        <TodoList />
       </div>
     );
   }

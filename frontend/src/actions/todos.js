@@ -1,7 +1,6 @@
 import axios from 'axios';
-
-import { GET_TODOS, ADD_TODO, DELETE_TODO, EDIT_TODO, GET_TODOS_BY_BUCKET } from './types';
 import history from '../history'; 
+import { GET_TODOS, GET_TODO, ADD_TODO, DELETE_TODO, EDIT_TODO, GET_TODOS_BY_BUCKET } from './types';
 import API from '../API';
 
 // GET TODOS
@@ -14,8 +13,8 @@ export const getTodos = () => async dispatch => {
 };
 
 // GET TODOS BY BUCKET
-export const getTodosByBucket = () => async dispatch => {
-  const res = await axios.get(API.TODOSBYBUCKET + `?bucketid=${id}`);
+export const getTodosByBucket = bucketId => async dispatch => {
+  const res = await axios.get(API.TODOSBYBUCKET + `?bucketid=${bucketId}`);
   dispatch({
     type: GET_TODOS_BY_BUCKET,
     payload: res.data
@@ -24,7 +23,7 @@ export const getTodosByBucket = () => async dispatch => {
 
 // GET TODO
 export const getTodo = id => async dispatch => {
-  const res = await axios.get(`/api/todos/${id}/`);
+  const res = await axios.get(API.TODOS + `${id}/`);
   dispatch({
     type: GET_TODO,
     payload: res.data
@@ -42,21 +41,24 @@ export const addTodo = formValues => async dispatch => {
 };
 
 // DELETE TODO
-export const deleteTodo = id => async dispatch => { // added
-  await axios.delete(`/api/todos/${id}/`);
-  dispatch({
-    type: DELETE_TODO,
-    payload: id
-  })
-  history.push('/');
+export const deleteTodo = id => async dispatch => {
+  await axios.delete(API.TODOS +  `${id}/`)
+  .then(res => {
+    console.log(res)
+    dispatch({
+      type: DELETE_TODO,
+      payload: id
+    })
+})
+.catch(err => alert(err.response.data))
 }
 
 // EDIT TODO
 export const editTodo = (id, formValues) => async dispatch => {
-  const res = await axios.patch(`/api/todos/${id}/`, formValues);
+  const res = await axios.patch(API.TODOS + `${id}/`, formValues);
   dispatch({
     type: EDIT_TODO,
     payload: res.data
   });
-  history.push('/');
+  history.push('/todos/' + id);
 }
