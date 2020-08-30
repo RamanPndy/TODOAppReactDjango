@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {reset} from 'redux-form';
+
 import { GET_BUCKETS, GET_BUCKET, ADD_BUCKET, DELETE_BUCKET } from './types';
 import history from '../history'; 
 import API from '../API';
@@ -14,7 +16,7 @@ export const getBuckets = () => async dispatch => {
 
 // GET BUCKET
 export const getBucket = id => async dispatch => {
-  const res = await axios.get(API.BUCKETS + `${id}/`);
+  const res = await axios.get(API.BUCKETS + `${id}`);
   dispatch({
     type: GET_BUCKET,
     payload: res.data

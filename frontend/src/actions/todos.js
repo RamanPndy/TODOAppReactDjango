@@ -1,4 +1,6 @@
 import axios from 'axios';
+import {reset} from 'redux-form';
+
 import history from '../history'; 
 import { GET_TODOS, GET_TODO, ADD_TODO, DELETE_TODO, EDIT_TODO, GET_TODOS_BY_BUCKET } from './types';
 import API from '../API';
@@ -23,7 +25,7 @@ export const getTodosByBucket = bucketId => async dispatch => {
 
 // GET TODO
 export const getTodo = id => async dispatch => {
-  const res = await axios.get(API.TODOS + `${id}/`);
+  const res = await axios.get(API.TODOS + `${id}`);
   dispatch({
     type: GET_TODO,
     payload: res.data
@@ -42,20 +44,20 @@ export const addTodo = formValues => async dispatch => {
 
 // DELETE TODO
 export const deleteTodo = id => async dispatch => {
-  await axios.delete(API.TODOS +  `${id}/`)
+  await axios.delete(API.TODOS +  `${id}`)
   .then(res => {
-    console.log(res)
     dispatch({
       type: DELETE_TODO,
       payload: id
     })
+    history.push('/todos/' + id);
 })
 .catch(err => alert(err.response.data))
 }
 
 // EDIT TODO
 export const editTodo = (id, formValues) => async dispatch => {
-  const res = await axios.patch(API.TODOS + `${id}/`, formValues);
+  const res = await axios.put(API.TODO, formValues);
   dispatch({
     type: EDIT_TODO,
     payload: res.data

@@ -16,6 +16,9 @@ class TodoForm extends Component {
 
   onSubmit = formValues => {
     formValues['bucketid'] = this.props.bucketId
+    if (this.props.initialValues) {
+      formValues['id'] = this.props.initialValues['id']
+    }
     this.props.onSubmit(formValues);
   };
 

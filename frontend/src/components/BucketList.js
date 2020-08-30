@@ -22,7 +22,7 @@ class BucketList extends Component {
                 Delete
               </Link>
             </div>
-            <i className='large calendar outline middle aligned icon' />
+            <i className='large folder middle aligned icon' />
             <div className='content'>
               <Link to={`/todos/${bucket.id}`} className='header'>
                 {bucket.name}

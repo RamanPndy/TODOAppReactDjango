@@ -5,8 +5,7 @@ class Header extends Component {
   render() {
     return (
       <div className='ui inverted menu' style={{ borderRadius: '0' }}>
-        <a className='header item'>TODO App</a>
-        <Link to={`/`} className='item'> Home </Link>
+        <Link to={`/`} className='item'> TODO App </Link>
       </div>
     );
   }

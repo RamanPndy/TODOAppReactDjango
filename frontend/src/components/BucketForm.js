@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
+import CreatableSelect from 'react-select/lib/Creatable';
+import axios from 'axios';
+
+import API from '../API';
 
 class BucketForm extends Component {
-  renderField = ({ input, label, meta: { touched, error } }) => {
-    return (
-      <div className={`field ${touched && error ? 'error' : ''}`}>
-        <label>{label}</label>
-        <input {...input} autoComplete='off' />
-        {touched && error && (
-          <span className='ui pointing red basic label'>{error}</span>
-        )}
-      </div>
-    );
-  };
+  state = {
+    existingBuckets : [],
+    bucketName : ''
+  }
+
+  componentDidMount = async() => {
+    let bucketOptions = []
+    await axios.get(API.BUCKETS).then(res => {
+      let buckets = res.data
+      buckets.forEach((bucket) => {
+        bucketOptions.push({label: bucket.name, value: bucket.name})
+      })
+      this.setState({existingBuckets: bucketOptions})
+  })
+  .catch(err => alert(err.response.data))
+  }
 
   onSubmit = formValues => {
+    formValues['bucket'] = this.state.bucketName
     this.props.onSubmit(formValues);
   };
 
@@ -25,7 +35,13 @@ class BucketForm extends Component {
           onSubmit={this.props.handleSubmit(this.onSubmit)}
           className='ui form error'
         >
-          <Field name='bucket' component={this.renderField} label='Bucket' />
+          <div className={`field`}>
+            <label>Create TODO Bucket</label>
+            <CreatableSelect 
+              options={this.state.existingBuckets} 
+              isClearable
+              onChange={opt => this.setState({bucketName: opt.value})} />
+          </div>
           <button className='ui primary button'>Add</button>
         </form>
       </div>

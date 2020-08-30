@@ -78,3 +78,19 @@ class ToDoAPIView(APIView):
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request):
+        request_data = request.data
+        todo_id = request_data.get('id')
+        task = request_data.get('task')
+        taskstatus = request_data.get('status')
+        try:
+            todo = Todo.objects.get(id=todo_id)
+            todo.task = task
+            todo.status = taskstatus
+            todo.last_modified_at = datetime.now()
+            todo.save()
+            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'task': todo.task, 'bucket': todo.bucket.name, 'created_at': todo.created_at})
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
