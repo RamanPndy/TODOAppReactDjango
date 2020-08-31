@@ -24,8 +24,12 @@ class BucketForm extends Component {
   }
 
   onSubmit = formValues => {
-    formValues['bucket'] = this.state.bucketName
-    this.props.onSubmit(formValues);
+    if (this.state.bucketName){
+      formValues['bucket'] = this.state.bucketName
+      this.props.onSubmit(formValues);
+    } else {
+      alert ("Bucket name should not be empty.")
+    }
   };
 
   render() {

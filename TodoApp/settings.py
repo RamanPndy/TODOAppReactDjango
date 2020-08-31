@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'TodoApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('DBNAME'),
         'USER': os.getenv('DBUSER'),
         'PASSWORD': os.getenv('DBPASS'),

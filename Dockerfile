@@ -7,8 +7,10 @@ LABEL MAINTAINER "Raman Pandey <raman.pndy@gmail.com>"
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-# install psycopg2 dependencies
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+# install mysql dependencies
+RUN apk update \
+    && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add --no-cache mariadb-dev
 
 # Set the working directory to /app
 WORKDIR /app

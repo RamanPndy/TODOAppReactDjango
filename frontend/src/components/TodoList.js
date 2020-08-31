@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { getTodosByBucket, deleteTodo } from '../actions/todos';
+import { toHumanReadableDateTime } from '../Utils';
 
 class TodoList extends Component {
   componentDidMount() {
@@ -37,8 +38,8 @@ class TodoList extends Component {
               </Link>
               <div className='content'>Bucket: {todo.bucket}</div>
               <div className='content'>Status: {todo.status}</div>
-              <div className='description'>Created At: {todo.created_at}</div>
-              <div className='description'>Last Modified At: {todo.last_modified_at}</div>
+              <div className='description'>Created At: {toHumanReadableDateTime(todo.created_at)}</div>
+              <div className='description'>Last Modified At: {toHumanReadableDateTime(todo.last_modified_at)}</div>
             </div>
           </div>
         ))}

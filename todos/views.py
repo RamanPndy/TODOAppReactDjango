@@ -57,7 +57,7 @@ class BucketAPIView(APIView):
             todos = Todo.objects.filter(bucket=bucket)
             if todos.exists():
                 return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data="Bucket {} has todos {} associated with it.".
-                                format(bucket.name, ''.join([todo.task for todo in todos])))
+                                format(bucket.name, ','.join([todo.task for todo in todos])))
             else:
                 bucket.delete()
                 return Response(status=status.HTTP_200_OK, data="Bucket {} deleted.".format(bucket.name))

@@ -1,14 +1,14 @@
 version: '3.2'
 services:
-  postgres:
-    container_name: postgres
-    image: "postgres"
+  mysql:
+    container_name: mysql
+    image: "mysql"
     env_file:
-      - postgres.env
+      - mysql.env
     volumes:
-      - todoapp-postgres-data:/var/lib/postgresql/data/
+      - todoapp-mysql-data:/var/lib/mysql
     ports:
-      - '5432:5432'
+      - '3306:3306'
     restart: always
   todoapp:
     container_name: todoapp
@@ -19,7 +19,7 @@ services:
       - todoapp.env
     restart: always
     depends_on:
-      - postgres
+      - mysql
 
 volumes:
-  todoapp-postgres-data:
+  todoapp-mysql-data:

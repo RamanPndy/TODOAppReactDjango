@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { getBuckets, deleteBucket } from '../actions/buckets';
+import { toHumanReadableDateTime } from '../Utils';
 
 class BucketList extends Component {
   componentDidMount() {
@@ -27,7 +28,7 @@ class BucketList extends Component {
               <Link to={`/todos/${bucket.id}`} className='header'>
                 {bucket.name}
               </Link>
-              <div className='description'>{bucket.created_at}</div>
+              <div className='description'>Created At: {toHumanReadableDateTime(bucket.created_at)}</div>
             </div>
           </div>
         ))}
