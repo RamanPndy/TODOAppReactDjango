@@ -43,24 +43,24 @@ export const addTodo = formValues => async dispatch => {
 };
 
 // DELETE TODO
-export const deleteTodo = id => async dispatch => {
+export const deleteTodo = (bucketId, id) => async dispatch => {
   await axios.delete(API.TODOS +  `${id}`)
   .then(res => {
     dispatch({
       type: DELETE_TODO,
       payload: id
     })
-    history.push('/todos/' + id);
+    history.push('/todos/' + bucketId);
 })
 .catch(err => alert(err.response.data))
 }
 
 // EDIT TODO
-export const editTodo = (id, formValues) => async dispatch => {
+export const editTodo = (bucketId, formValues) => async dispatch => {
   const res = await axios.put(API.TODO, formValues);
   dispatch({
     type: EDIT_TODO,
     payload: res.data
   });
-  history.push('/todos/' + id);
+  history.push('/todos/' + bucketId);
 }

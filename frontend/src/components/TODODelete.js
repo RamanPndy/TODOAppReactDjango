@@ -14,15 +14,14 @@ class TodoDelete extends Component {
     if (!this.props.todo) {
       return 'Are you sure you want to delete this task?';
     }
-    return `Are you sure you want to delete the task: ${this.props.todo.task}`;
+    return `Are you sure you want to delete the task: ${this.props.todo.task} ?`;
   }
 
   renderActions() {
-    const { id } = this.props.match.params;
     return (
       <Fragment>
         <button
-          onClick={() => this.props.deleteTodo(id)}
+          onClick={() => this.props.deleteTodo(this.props.match.params.bucketid, this.props.match.params.id)}
           className='ui negative button'
         >
           Delete

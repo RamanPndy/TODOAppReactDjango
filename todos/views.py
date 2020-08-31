@@ -25,10 +25,12 @@ class GetTodosByBucketAPIView(APIView):
             for todo in todos:
                 data = {}
                 data['bucket'] = todo.bucket.name
+                data['bucketid'] = todo.bucket.id
                 data['id'] = todo.id
                 data['task'] = todo.task
                 data['status'] = todo.status
                 data['created_at'] = todo.created_at
+                data['last_modified_at'] = todo.last_modified_at
                 todos_list.append(data)
             return Response(status=status.HTTP_200_OK, data=todos_list)
         except Exception as e:
@@ -74,7 +76,8 @@ class ToDoAPIView(APIView):
             bucket = Bucket.objects.get(id=bucket_id)
             todo = Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
                                 created_by=user, last_modified_by=user, created_at=datetime.now(), last_modified_at=datetime.now())
-            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'task': todo.task, 'bucket': bucket.name, 'created_at': todo.created_at})
+            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'bucketid': bucket_id, 'task': todo.task, 'status': todo.status,
+                                                             'bucket': bucket.name, 'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -90,7 +93,8 @@ class ToDoAPIView(APIView):
             todo.status = taskstatus
             todo.last_modified_at = datetime.now()
             todo.save()
-            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'task': todo.task, 'bucket': todo.bucket.name, 'created_at': todo.created_at})
+            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'bucketid': todo.bucket.id, 'task': todo.task, 'status': todo.status,
+                                                             'bucket': todo.bucket.name, 'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

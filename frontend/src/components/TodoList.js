@@ -6,18 +6,25 @@ import { getTodosByBucket, deleteTodo } from '../actions/todos';
 
 class TodoList extends Component {
   componentDidMount() {
-    let bucketId = window.location.pathname.split("/")[2]
+    let bucketId = this.getBucketID()
     this.props.getTodosByBucket(bucketId);
   }
 
+  getBucketID = () => {
+    return window.location.pathname.split("/")[2]
+  }
+
   render() {
+    let filteredTodos = this.props.todos.filter((todo) => {
+      return todo["bucketid"] == this.getBucketID()
+    })
     return (
       <div className='ui relaxed divided list' style={{ marginTop: '2rem' }}>
-        {this.props.todos.map(todo => (
+        {filteredTodos.map(todo => (
           <div className='item' key={todo.id}>
             <div className='right floated content'>
               <Link
-                to={`/todo/delete/${todo.id}`}
+                to={`/todo/delete/${todo.bucketid}/${todo.id}`}
                 className='small ui negative basic button'
               >
                 Delete
@@ -25,12 +32,13 @@ class TodoList extends Component {
             </div>
             <i className='large calendar outline middle aligned icon' />
             <div className='content'>
-              <Link to={`/todo/edit/${todo.id}`} className='header'>
+              <Link to={`/todo/edit/${todo.bucketid}/${todo.id}`} className='header'>
                 {todo.task}
               </Link>
-              <div className='content'>{todo.bucket}</div>
-              <div className='content'>{todo.status}</div>
-              <div className='description'>{todo.created_at}</div>
+              <div className='content'>Bucket: {todo.bucket}</div>
+              <div className='content'>Status: {todo.status}</div>
+              <div className='description'>Created At: {todo.created_at}</div>
+              <div className='description'>Last Modified At: {todo.last_modified_at}</div>
             </div>
           </div>
         ))}

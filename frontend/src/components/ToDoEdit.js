@@ -10,7 +10,7 @@ class TodoEdit extends Component {
   }
 
   onSubmit = formValues => {
-    this.props.editTodo(this.props.match.params.id, formValues);
+    this.props.editTodo(this.props.match.params.bucketid, formValues);
   };
 
   render() {
