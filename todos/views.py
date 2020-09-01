@@ -43,9 +43,13 @@ class BucketAPIView(APIView):
         bucket_name = request_data.get('bucket')
         try:
             user = BaseModel.get_admin_user()
-            bucket = Bucket.objects.create(name=bucket_name, created_by=user, last_modified_by=user,
-                                  created_at=datetime.now(), last_modified_at=datetime.now())
-            return Response(status=status.HTTP_200_OK, data={'id': bucket.id, 'name': bucket.name, 'created_at': bucket.created_at})
+            buckets = Bucket.objects.filter(name=bucket_name)
+            if not buckets.exists():
+                bucket = Bucket.objects.create(name=bucket_name, created_by=user, last_modified_by=user,
+                                               created_at=datetime.now(), last_modified_at=datetime.now())
+                return Response(status=status.HTTP_200_OK, data={'id': bucket.id, 'name': bucket.name, 'created_at': bucket.created_at})
+            else:
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data="Bucket with name {} already exists.".format(bucket_name))
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -74,10 +78,16 @@ class ToDoAPIView(APIView):
         try:
             user = BaseModel.get_admin_user()
             bucket = Bucket.objects.get(id=bucket_id)
-            todo = Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
-                                created_by=user, last_modified_by=user, created_at=datetime.now(), last_modified_at=datetime.now())
-            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'bucketid': bucket_id, 'task': todo.task, 'status': todo.status,
-                                                             'bucket': bucket.name, 'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
+            todos = Todo.objects.filter(task=task, bucket=bucket)
+            if not todos.exists():
+                todo = Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
+                                    created_by=user, last_modified_by=user, created_at=datetime.now(), last_modified_at=datetime.now())
+                return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'bucketid': bucket_id, 'task': todo.task,
+                                                                 'status': todo.status, 'bucket': bucket.name,
+                                                                 'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
+            else:
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE, data="Todo with name {} in bucket {} already exists.".
+                                format(task, bucket.name))
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -85,16 +95,33 @@ class ToDoAPIView(APIView):
     def put(self, request):
         request_data = request.data
         todo_id = request_data.get('id')
+        bucket_id = request_data.get('bucketid')
         task = request_data.get('task')
         taskstatus = request_data.get('status')
         try:
-            todo = Todo.objects.get(id=todo_id)
-            todo.task = task
-            todo.status = taskstatus
-            todo.last_modified_at = datetime.now()
-            todo.save()
-            return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'bucketid': todo.bucket.id, 'task': todo.task, 'status': todo.status,
-                                                             'bucket': todo.bucket.name, 'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
+            bucket = Bucket.objects.get(id=bucket_id)
+            todo = Todo.objects.get(id=todo_id, bucket=bucket)
+            if todo.task == task:
+                todo.status = taskstatus
+                todo.last_modified_at = datetime.now()
+                todo.save()
+                return Response(status=status.HTTP_200_OK, data={'id': todo.id, 'bucketid': todo.bucket.id, 'task': todo.task,
+                                                                 'status': todo.status,  'bucket': todo.bucket.name,
+                                                                 'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
+            else:
+                todos = Todo.objects.filter(bucket=bucket, task=task)
+                if not todos.exists():
+                    user = BaseModel.get_admin_user()
+                    todo = Todo.objects.create(bucket=bucket, task=task, status=taskstatus if taskstatus else 'CREATED',
+                                               created_by=user, last_modified_by=user, created_at=datetime.now(),
+                                               last_modified_at=datetime.now())
+                    return Response(status=status.HTTP_200_OK,
+                                    data={'id': todo.id, 'bucketid': bucket_id, 'task': todo.task,
+                                          'status': todo.status, 'bucket': bucket.name,
+                                          'created_at': todo.created_at, 'last_modified_at': todo.last_modified_at})
+                else:
+                    return Response(status=status.HTTP_406_NOT_ACCEPTABLE,
+                                    data="Todo with name {} in bucket {} already exists.".format(task, bucket.name))
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

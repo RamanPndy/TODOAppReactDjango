@@ -31,7 +31,7 @@ class TodoForm extends Component {
           className='ui form error'
         >
           <Field name='task' component={this.renderField} label='Task' />
-          <label>Status</label>
+          <h4>Status</h4>
           <Field name="status" component="select" style={{marginTop:10, marginBottom:10, paddingBottom:10}}>
             <option value="CREATED">CREATED</option>
             <option value="INPROGRESS">INPROGRESS</option>

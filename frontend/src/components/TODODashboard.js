@@ -8,7 +8,7 @@ class TODODashboard extends Component {
   }
 
   componentDidMount () {
-    let bucketId = window.location.pathname.split("/")[2]
+    let bucketId = this.props.match.params.bucketid
     this.setState({bucketid: bucketId})
   }
 

@@ -1,7 +1,10 @@
 # TODOAppReactDjango
 Simple TODO APP created in React JS as frontend application and Django as backend application.
 
+Frontend: ReactJS<br>
+Backend: Python 3.8.3, Django 3.0.2<br>
 Database: MySQL<br>
+
 Django Application contains both Frontend and Backend Application.
 
 To run with Docker run below steps:

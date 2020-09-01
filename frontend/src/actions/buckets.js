@@ -7,37 +7,45 @@ import API from '../API';
 
 // GET BUCKETS
 export const getBuckets = () => async dispatch => {
-  const res = await axios.get(API.BUCKETS);
-  dispatch({
-    type: GET_BUCKETS,
-    payload: res.data
-  });
+  await axios.get(API.BUCKETS)
+  .then(res => {
+    dispatch({
+      type: GET_BUCKETS,
+      payload: res.data
+    });
+  })
+  .catch(err => alert(err.response.data))
 };
 
 // GET BUCKET
 export const getBucket = id => async dispatch => {
-  const res = await axios.get(API.BUCKETS + `${id}`);
-  dispatch({
-    type: GET_BUCKET,
-    payload: res.data
-  });
+  await axios.get(API.BUCKETS + `${id}`)
+  .then(res => {
+    dispatch({
+      type: GET_BUCKET,
+      payload: res.data
+    });
+  })
+  .catch(err => alert(err.response.data))
 };
 
 // ADD BUCKET
 export const addBucket = formValues => async dispatch => {
-  const res = await axios.post(API.BUCKET, { ...formValues });
-  dispatch({
-    type: ADD_BUCKET,
-    payload: res.data
-  });
-  dispatch(reset('bucketForm'));
+  await axios.post(API.BUCKET, { ...formValues })
+  .then(res => {
+    dispatch({
+      type: ADD_BUCKET,
+      payload: res.data
+    });
+    dispatch(reset('bucketForm'));
+  })
+  .catch(err => alert(err.response.data))
 };
 
 // DELETE BUCKET
 export const deleteBucket = id => async dispatch => {
   await axios.delete(API.BUCKET + `?bucketid=${id}`)
   .then(res => {
-    console.log(res)
     dispatch({
       type: DELETE_BUCKET,
       payload: id
